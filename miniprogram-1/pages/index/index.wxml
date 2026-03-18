@@ -1,0 +1,115 @@
+<view class="page-shell">
+  <navigation-bar title="识别" back="{{false}}" color="#3b3025" background="rgba(255,250,243,0.9)"></navigation-bar>
+  <view class="page-content nutrition-page">
+    <view class="card today-card">
+      <view class="section-head">
+        <view>
+          <text class="section-title">今日总摄入</text>
+          <text class="muted-text">{{latestSummary.date}}</text>
+        </view>
+        <button wx:if="{{!hasCustomDailyTarget}}" class="link-button" bindtap="goToUserTab">去填写目标</button>
+      </view>
+      <text wx:if="{{!hasCustomDailyTarget}}" class="goal-tip top-tip">当前使用推荐值，请前往用户页填写你的热量、碳水、蛋白质和脂肪目标。</text>
+      <view class="ring-row">
+        <view wx:for="{{ringCards}}" wx:key="key" wx:for-item="item" class="ring-card">
+          <canvas class="goal-ring" canvas-id="{{item.canvasId}}" style="width: 120px; height: 120px;"></canvas>
+          <text class="ring-label">{{item.label}}</text>
+          <text class="ring-value">{{item.consumedText}} / {{item.targetText}} {{item.unit}}</text>
+          <text class="ring-remaining">剩余 {{item.remainingText}} {{item.unit}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card sub-menu-card">
+      <view class="sub-menu-tabs">
+        <view wx:for="{{subMenuItems}}" wx:key="key" wx:for-item="item" class="sub-menu-tab {{activeSubMenu === item.key ? 'sub-menu-tab-active' : ''}}" data-key="{{item.key}}" bindtap="onSubMenuChange">{{item.label}}</view>
+      </view>
+
+      <view wx:if="{{activeSubMenu === 'upload'}}" class="sub-panel">
+        <view class="section-head">
+          <text class="section-title">图片上传</text>
+          <text class="muted-text">支持拍照或相册单图上传</text>
+        </view>
+        <view wx:if="{{localImagePath}}" class="image-preview-wrap">
+          <image class="image-preview" src="{{localImagePath}}" mode="aspectFill"></image>
+          <button class="secondary-button slim-button" bindtap="clearImage">重新选择</button>
+        </view>
+        <view wx:else class="empty-uploader" bindtap="chooseImage">
+          <text class="empty-uploader-icon">+</text>
+          <text class="empty-uploader-text">点击上传食物照片</text>
+        </view>
+        <button class="primary-button action-button" bindtap="chooseImage">选择图片</button>
+      </view>
+
+      <view wx:elif="{{activeSubMenu === 'remark'}}" class="sub-panel">
+        <view class="section-head">
+          <text class="section-title">备注补充</text>
+          <text class="muted-text">例如：一碗牛肉面，加蛋，不喝汤</text>
+        </view>
+        <textarea class="remark-textarea" placeholder="可填写分量、烹饪方式、食材补充，帮助 AI 更准确估算。" maxlength="200" value="{{remark}}" bindinput="onRemarkInput"></textarea>
+        <view class="status-panel {{analyzeState}}">
+          <text class="status-title">当前状态</text>
+          <text class="status-text">{{statusText}}</text>
+        </view>
+        <button class="primary-button action-button {{(!localImagePath || isBusy) ? 'button-disabled' : ''}}" disabled="{{!localImagePath || isBusy}}" bindtap="analyzeImage">{{analyzeState === 'uploading' ? '上传中...' : analyzeState === 'analyzing' ? '识别中...' : '开始 AI 识别'}}</button>
+      </view>
+
+      <view wx:else class="sub-panel">
+        <view class="section-head">
+          <text class="section-title">识别结果</text>
+          <text class="muted-text">营养值统一按估算结果展示</text>
+        </view>
+        <view class="totals-grid">
+          <view class="metric-pill heat"><text class="metric-value">{{totalsText.calories}}</text><text class="metric-label">热量 kcal</text></view>
+          <view class="metric-pill carbs"><text class="metric-value">{{totalsText.carbs}}</text><text class="metric-label">碳水 g</text></view>
+          <view class="metric-pill protein"><text class="metric-value">{{totalsText.protein}}</text><text class="metric-label">蛋白质 g</text></view>
+          <view class="metric-pill fat"><text class="metric-value">{{totalsText.fat}}</text><text class="metric-label">脂肪 g</text></view>
+        </view>
+        <view wx:if="{{recognizedFoods.length}}" class="food-list">
+          <view class="food-item" wx:for="{{recognizedFoods}}" wx:key="index" wx:for-item="food">
+            <view class="food-header">
+              <text class="food-name">{{food.name}}</text>
+              <text class="food-portion">{{food.portionText}}</text>
+            </view>
+            <text class="food-metrics">{{food.caloriesText}} kcal / 碳水 {{food.carbsText}}g / 蛋白质 {{food.proteinText}}g / 脂肪 {{food.fatText}}g</text>
+          </view>
+        </view>
+        <view wx:elif="{{analyzeState === 'uploading' || analyzeState === 'analyzing'}}" class="loading-result">
+          <view class="loading-spinner"></view>
+          <text class="loading-text">{{analyzeState === 'uploading' ? '图片上传中，请稍候...' : 'AI 正在识别，请稍候...'}}</text>
+        </view>
+        <view wx:else class="empty-result">
+          <text>完成识别后，这里会显示食物和营养估算结果。</text>
+        </view>
+        <view class="meal-section">
+          <text class="meal-title">标注餐次</text>
+          <view class="meal-options">
+            <view wx:for="{{mealOptions}}" wx:key="value" wx:for-item="meal" class="meal-chip {{mealType === meal.value ? 'meal-chip-active' : ''}}" data-value="{{meal.value}}" bindtap="onMealTypeChange">{{meal.label}}</view>
+          </view>
+        </view>
+        <view wx:if="{{aiProvider}}" class="provider-note">AI 服务：{{aiProvider}}</view>
+        <button class="primary-button action-button {{(analyzeState !== 'analyzeSuccess' || isBusy) ? 'button-disabled' : ''}}" disabled="{{analyzeState !== 'analyzeSuccess' || isBusy}}" bindtap="saveRecord">保存本次记录</button>
+      </view>
+    </view>
+
+    <view class="card history-card">
+      <view class="section-head">
+        <text class="section-title">最近记录</text>
+        <text class="muted-text">最近 5 次保存结果</text>
+      </view>
+      <view wx:if="{{recentRecords.length}}">
+        <view class="history-item" wx:for="{{recentRecords}}" wx:key="_id" wx:for-item="record">
+          <view class="history-top">
+            <text class="history-meal">{{record.mealTypeLabel}}</text>
+            <text class="history-time">{{record.createdAtText}}</text>
+          </view>
+          <text class="history-foods">{{record.historyTitle}}</text>
+          <text class="history-metrics">{{record.totalsText.calories}} kcal / 碳水 {{record.totalsText.carbs}}g / 蛋白质 {{record.totalsText.protein}}g / 脂肪 {{record.totalsText.fat}}g</text>
+        </view>
+      </view>
+      <view wx:else class="empty-result">
+        <text>还没有保存记录，完成一次识别后会出现在这里。</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,143 @@
+.summary-scroll {
+  height: calc(100vh - 88px);
+}
+
+.summary-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.error-card,
+.list-card,
+.empty-card {
+  padding: 28rpx;
+}
+
+.error-card {
+  background: rgba(178, 79, 67, 0.1);
+}
+
+.error-text,
+.empty-text,
+.row-count,
+.target-tip,
+.target-strip-note {
+  font-size: 24rpx;
+  color: #7a6855;
+  line-height: 1.6;
+}
+
+.target-strip {
+  margin-bottom: 18rpx;
+  padding-bottom: 18rpx;
+  border-bottom: 1rpx solid rgba(122, 104, 85, 0.12);
+}
+
+.empty-target-strip {
+  margin-bottom: 24rpx;
+}
+
+.target-strip-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-bottom: 12rpx;
+}
+
+.target-strip-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #4d3b2d;
+}
+
+.target-tip {
+  display: block;
+  margin-bottom: 12rpx;
+  color: #b05c33;
+}
+
+.target-strip-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 12rpx;
+  border-radius: 18rpx;
+  background: rgba(211, 111, 61, 0.08);
+}
+
+.target-inline {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6rpx;
+}
+
+.date-wrap-inline {
+  flex: 1.8;
+  justify-content: flex-start;
+}
+
+.target-inline-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #a5512b;
+}
+
+.target-inline-value {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #4d3b2d;
+}
+
+.target-inline-unit {
+  font-size: 20rpx;
+  color: #9a765d;
+}
+
+.login-nav-button {
+  margin-top: 24rpx;
+  width: 100%;
+}
+
+.summary-head {
+  color: #a5512b;
+  font-weight: 600;
+  background: rgba(211, 111, 61, 0.1);
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 12rpx;
+  border-bottom: 1rpx solid rgba(122, 104, 85, 0.12);
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.date-wrap {
+  flex: 1.8;
+  display: flex;
+  flex-direction: column;
+}
+
+.date-col,
+.metric-col {
+  font-size: 24rpx;
+}
+
+.metric-col {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+}
+
+.metric-good {
+  color: #2d8b57;
+}
+
+.metric-bad {
+  color: #b24f43;
+}

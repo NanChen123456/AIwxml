@@ -1,0 +1,88 @@
+<view class="page-shell">
+  <navigation-bar title="每日汇总" back="{{false}}" color="#3b3025" background="rgba(255,250,243,0.9)"></navigation-bar>
+  <scroll-view class="summary-scroll" scroll-y="true">
+    <view class="page-content summary-page">
+      <view wx:if="{{!isLoggedIn}}" class="card empty-card">
+        <text class="empty-text">未登录，无法查看每日汇总。</text>
+        <button class="primary-button login-nav-button" bindtap="goToUserTab">前往登录</button>
+      </view>
+
+      <block wx:elif="{{errorText}}">
+        <view class="card error-card">
+          <text class="error-text">{{errorText}}</text>
+          <button class="secondary-button" bindtap="retryLoad">重新加载</button>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view wx:if="{{rows.length}}" class="card list-card">
+          <view class="target-strip">
+            <view class="target-strip-head">
+              <text class="target-strip-title">每日目标摄入</text>
+              <text class="target-strip-note">绿色为控制在目标 -10% 到 +5% 内</text>
+            </view>
+            <text wx:if="{{!hasCustomDailyTarget}}" class="target-tip">当前使用推荐目标值，建议前往用户页填写你的个人目标。</text>
+            <view class="target-strip-row">
+              <view class="target-inline date-wrap-inline">
+                <text class="target-inline-label">目标</text>
+              </view>
+              <view class="target-inline metric-col">
+                <text class="target-inline-value">{{targetCard.caloriesText}}</text>
+                <text class="target-inline-unit">kcal</text>
+              </view>
+              <view class="target-inline metric-col">
+                <text class="target-inline-value">{{targetCard.carbsText}}</text>
+                <text class="target-inline-unit">g</text>
+              </view>
+              <view class="target-inline metric-col">
+                <text class="target-inline-value">{{targetCard.proteinText}}</text>
+                <text class="target-inline-unit">g</text>
+              </view>
+              <view class="target-inline metric-col">
+                <text class="target-inline-value">{{targetCard.fatText}}</text>
+                <text class="target-inline-unit">g</text>
+              </view>
+            </view>
+          </view>
+
+          <view class="summary-row summary-head">
+            <text class="date-col">日期</text>
+            <text class="metric-col">热量</text>
+            <text class="metric-col">碳水</text>
+            <text class="metric-col">蛋白质</text>
+            <text class="metric-col">脂肪</text>
+          </view>
+          <view class="summary-row" wx:for="{{rows}}" wx:key="date" wx:for-item="row">
+            <view class="date-wrap">
+              <text class="date-col">{{row.date}}</text>
+              <text class="row-count">{{row.recordCount}} 次</text>
+            </view>
+            <text class="metric-col {{row.caloriesDisplay.className}}">{{row.caloriesDisplay.text}}</text>
+            <text class="metric-col {{row.carbsDisplay.className}}">{{row.carbsDisplay.text}}</text>
+            <text class="metric-col {{row.proteinDisplay.className}}">{{row.proteinDisplay.text}}</text>
+            <text class="metric-col {{row.fatDisplay.className}}">{{row.fatDisplay.text}}</text>
+          </view>
+        </view>
+
+        <view wx:else class="card empty-card">
+          <view class="target-strip empty-target-strip">
+            <view class="target-strip-head">
+              <text class="target-strip-title">每日目标摄入</text>
+            </view>
+            <text wx:if="{{!hasCustomDailyTarget}}" class="target-tip">当前使用推荐目标值，建议前往用户页填写你的个人目标。</text>
+            <view class="target-strip-row">
+              <view class="target-inline date-wrap-inline">
+                <text class="target-inline-label">目标</text>
+              </view>
+              <view class="target-inline metric-col"><text class="target-inline-value">{{targetCard.caloriesText}}</text><text class="target-inline-unit">kcal</text></view>
+              <view class="target-inline metric-col"><text class="target-inline-value">{{targetCard.carbsText}}</text><text class="target-inline-unit">g</text></view>
+              <view class="target-inline metric-col"><text class="target-inline-value">{{targetCard.proteinText}}</text><text class="target-inline-unit">g</text></view>
+              <view class="target-inline metric-col"><text class="target-inline-value">{{targetCard.fatText}}</text><text class="target-inline-unit">g</text></view>
+            </view>
+          </view>
+          <text class="empty-text">还没有每日汇总数据，先去识别页保存一条记录。</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>

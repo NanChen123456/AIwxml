@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/user/user"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom",
+    "backgroundColor": "#f5f1e8",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#8b775f",
+    "selectedColor": "#d36f3d",
+    "backgroundColor": "#fffaf3",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "\u8bc6\u522b"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "\u6bcf\u65e5\u6c47\u603b"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "\u7528\u6237"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

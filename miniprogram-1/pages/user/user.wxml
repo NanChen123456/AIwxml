@@ -1,0 +1,75 @@
+<view class="page-shell">
+  <navigation-bar title="用户" back="{{false}}" color="#3b3025" background="rgba(255,250,243,0.9)"></navigation-bar>
+  <view class="page-content user-page">
+    <view wx:if="{{!isLoggedIn}}" class="card login-card">
+      <text class="login-label">未登录</text>
+      <text class="login-desc">点击按钮，使用微信身份登录。登录成功后可再设置头像、昵称和每日目标摄入。</text>
+      <button class="primary-button login-button" loading="{{loading}}" disabled="{{loading}}" bindtap="handleLogin">微信身份登录</button>
+    </view>
+
+    <block wx:else>
+      <view class="card profile-card">
+        <view class="profile-top">
+          <button class="avatar-button" open-type="chooseAvatar" bind:chooseavatar="chooseAvatar">
+            <image wx:if="{{profile.avatarUrl}}" class="avatar" src="{{profile.avatarUrl}}" mode="aspectFill"></image>
+            <view wx:else class="avatar avatar-placeholder">设置头像</view>
+          </button>
+          <view class="profile-copy">
+            <text class="section-title">{{profile.nickName || '微信用户'}}</text>
+            <input class="nickname-input" type="nickname" placeholder="请输入昵称" value="{{profile.nickName}}" bindinput="onNicknameInput" />
+            <text class="muted-text">当前账号的数据按微信用户独立隔离。</text>
+          </view>
+        </view>
+        <button class="secondary-button logout-button" bindtap="logout">退出登录</button>
+      </view>
+
+      <view class="card target-card">
+        <view class="section-head">
+          <text class="section-title">每日目标摄入</text>
+          <text class="muted-text">四项都会用于首页圆环展示</text>
+        </view>
+        <text wx:if="{{!hasCustomDailyTarget}}" class="target-tip">你还没有填写个人目标，当前先使用推荐值：2000 kcal、250g 碳水、75g 蛋白质、60g 脂肪。建议尽快填写自己的每日目标。</text>
+        <view class="target-grid">
+          <view class="target-item">
+            <text class="target-label">热量 kcal</text>
+            <input class="target-input" type="number" value="{{targetInputCalories}}" data-field="targetInputCalories" bindinput="onTargetInput" />
+          </view>
+          <view class="target-item">
+            <text class="target-label">碳水 g</text>
+            <input class="target-input" type="number" value="{{targetInputCarbs}}" data-field="targetInputCarbs" bindinput="onTargetInput" />
+          </view>
+          <view class="target-item">
+            <text class="target-label">蛋白质 g</text>
+            <input class="target-input" type="number" value="{{targetInputProtein}}" data-field="targetInputProtein" bindinput="onTargetInput" />
+          </view>
+          <view class="target-item">
+            <text class="target-label">脂肪 g</text>
+            <input class="target-input" type="number" value="{{targetInputFat}}" data-field="targetInputFat" bindinput="onTargetInput" />
+          </view>
+        </view>
+        <button class="primary-button save-target-button" loading="{{savingTarget}}" disabled="{{savingTarget}}" bindtap="saveDailyTarget">保存每日目标</button>
+      </view>
+
+      <view class="card stat-card">
+        <view class="stat-item">
+          <text class="stat-label">当前用户 OpenID</text>
+          <text class="openid-text">{{openid || '加载中...'}}</text>
+        </view>
+        <view wx:if="{{unionid}}" class="stat-item">
+          <text class="stat-label">UnionID</text>
+          <text class="openid-text">{{unionid}}</text>
+        </view>
+        <view class="stat-grid">
+          <view class="stat-box">
+            <text class="stat-number">{{recordCount}}</text>
+            <text class="stat-label">识别记录</text>
+          </view>
+          <view class="stat-box">
+            <text class="stat-number">{{summaryCount}}</text>
+            <text class="stat-label">汇总天数</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

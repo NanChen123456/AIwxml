@@ -1,0 +1,71 @@
+page {
+  min-height: 100%;
+  background: #f7f3ea;
+  color: #3b3025;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+view,
+scroll-view,
+button,
+text,
+input,
+textarea,
+image,
+picker {
+  box-sizing: border-box;
+}
+
+.page-shell {
+  min-height: 100vh;
+}
+
+.page-content {
+  padding: 24rpx 24rpx 40rpx;
+}
+
+.card {
+  background: rgba(255, 250, 243, 0.95);
+  border: 1rpx solid rgba(122, 97, 65, 0.12);
+  border-radius: 28rpx;
+  box-shadow: 0 16rpx 48rpx rgba(72, 49, 28, 0.08);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.muted-text {
+  color: #7a6855;
+}
+
+.primary-button,
+.secondary-button,
+.danger-button {
+  border: none;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  line-height: 1;
+  padding: 24rpx 32rpx;
+}
+
+.primary-button {
+  color: #fff8ef;
+  background: #d36f3d;
+  box-shadow: 0 12rpx 24rpx rgba(211, 111, 61, 0.28);
+}
+
+.secondary-button {
+  color: #a5512b;
+  background: rgba(211, 111, 61, 0.12);
+}
+
+.danger-button {
+  color: #fff7f6;
+  background: #b24f43;
+}
+
+.button-disabled {
+  opacity: 0.45;
+}
