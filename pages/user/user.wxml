@@ -1,0 +1,48 @@
+<view class="page-shell">
+  <navigation-bar title="用户" back="{{false}}" color="#3b3025" background="rgba(255,250,243,0.9)"></navigation-bar>
+  <view class="page-content user-page">
+    <view wx:if="{{!isLoggedIn}}" class="card login-card">
+      <text class="login-label">未登录</text>
+      <text class="login-desc">点击按钮，使用微信身份登录。登录成功后可再设置头像和昵称。</text>
+      <button class="primary-button login-button" loading="{{loading}}" disabled="{{loading}}" bindtap="handleLogin">微信身份登录</button>
+    </view>
+
+    <block wx:else>
+      <view class="card profile-card">
+        <view class="profile-top">
+          <button class="avatar-button" open-type="chooseAvatar" bind:chooseavatar="chooseAvatar">
+            <image wx:if="{{profile.avatarUrl}}" class="avatar" src="{{profile.avatarUrl}}" mode="aspectFill"></image>
+            <view wx:else class="avatar avatar-placeholder">设置头像</view>
+          </button>
+          <view class="profile-copy">
+            <text class="section-title">{{profile.nickName || '微信用户'}}</text>
+            <input class="nickname-input" type="nickname" placeholder="请输入昵称" value="{{profile.nickName}}" bindinput="onNicknameInput" />
+            <text class="muted-text">当前账号的数据按微信用户独立隔离。</text>
+          </view>
+        </view>
+        <button class="secondary-button logout-button" bindtap="logout">退出登录</button>
+      </view>
+
+      <view class="card stat-card">
+        <view class="stat-item">
+          <text class="stat-label">当前用户 OpenID</text>
+          <text class="openid-text">{{openid || '加载中...'}}</text>
+        </view>
+        <view wx:if="{{unionid}}" class="stat-item">
+          <text class="stat-label">UnionID</text>
+          <text class="openid-text">{{unionid}}</text>
+        </view>
+        <view class="stat-grid">
+          <view class="stat-box">
+            <text class="stat-number">{{recordCount}}</text>
+            <text class="stat-label">识别记录</text>
+          </view>
+          <view class="stat-box">
+            <text class="stat-number">{{summaryCount}}</text>
+            <text class="stat-label">汇总天数</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

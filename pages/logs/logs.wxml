@@ -1,0 +1,42 @@
+<view class="page-shell">
+  <navigation-bar title="每日汇总" back="{{false}}" color="#3b3025" background="rgba(255,250,243,0.9)"></navigation-bar>
+  <scroll-view class="summary-scroll" scroll-y="true">
+    <view class="page-content summary-page">
+      <view wx:if="{{!isLoggedIn}}" class="card empty-card">
+        <text class="empty-text">未登录，无法查看每日汇总。</text>
+        <button class="primary-button login-nav-button" bindtap="goToUserTab">前往登录</button>
+      </view>
+
+      <block wx:elif="{{errorText}}">
+        <view class="card error-card">
+          <text class="error-text">{{errorText}}</text>
+          <button class="secondary-button" bindtap="retryLoad">重新加载</button>
+        </view>
+      </block>
+
+      <view wx:elif="{{rows.length}}" class="card list-card">
+        <view class="summary-row summary-head">
+          <text class="date-col">日期</text>
+          <text class="metric-col">热量</text>
+          <text class="metric-col">碳水</text>
+          <text class="metric-col">蛋白质</text>
+          <text class="metric-col">脂肪</text>
+        </view>
+        <view class="summary-row" wx:for="{{rows}}" wx:key="date" wx:for-item="row">
+          <view class="date-wrap">
+            <text class="date-col">{{row.date}}</text>
+            <text class="row-count">{{row.recordCount}} 次</text>
+          </view>
+          <text class="metric-col">{{row.totalCaloriesText}}</text>
+          <text class="metric-col">{{row.totalCarbsText}}</text>
+          <text class="metric-col">{{row.totalProteinText}}</text>
+          <text class="metric-col">{{row.totalFatText}}</text>
+        </view>
+      </view>
+
+      <view wx:else class="card empty-card">
+        <text class="empty-text">还没有每日汇总数据，先去识别页保存一条记录。</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>
