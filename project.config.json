@@ -1,0 +1,10 @@
+{
+  "compileType": "miniprogram",
+  "miniprogramRoot": ".",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "simulatorPluginLibVersion": {},
+  "setting": {
+    "enhance": true,
+    "es6": true
+  }
+}
